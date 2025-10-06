@@ -13,7 +13,7 @@ class Application
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 64)]
+    #[ORM\Column(length: 64, unique: true)]
     private ?string $passport_number = null;
 
     #[ORM\Column(length: 255)]
