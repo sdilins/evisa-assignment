@@ -16,28 +16,13 @@ class BlackListApplicationRepository extends ServiceEntityRepository
         parent::__construct($registry, BlackListApplication::class);
     }
 
-    //    /**
-    //     * @return BlackListApplication[] Returns an array of BlackListApplication objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('b')
-    //            ->andWhere('b.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('b.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function isPassportBlacklisted(string $passportNumber): bool
+    {
+        $qb = $this->createQueryBuilder('b')
+            ->select('COUNT(b.id)')
+            ->where('b.passportNumber = :p')
+            ->setParameter('p', $passportNumber);
 
-    //    public function findOneBySomeField($value): ?BlackListApplication
-    //    {
-    //        return $this->createQueryBuilder('b')
-    //            ->andWhere('b.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        return (int)$qb->getQuery()->getSingleScalarResult() > 0;
+    }
 }
