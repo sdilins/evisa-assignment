@@ -24,11 +24,11 @@ Postman collection at `postman/evisa-assignment.postman_collection.json` to test
 
 # Using the collection
 
-    Run Create Application:
+**Run Create Application:**
 
-This sends POST `localhost/api/applications`
+Sends POST `localhost/api/applications`
 
-Body example:
+Body (example):
 
     {
         "passport_number": "TST123456",
@@ -38,23 +38,55 @@ Body example:
         "passport_expiration": "2030-12-31"
     }
 
-Expected: `200 OK` and JSON with `passport_number`, `status`, `created_at`
+Expected behavior:
 
-    Run Get Application:
+HTTP Status: `200 OK`
+Response body (example):
 
-Uses passport_number to call GET `localhost/api/applications/{{passport_number}}`
+    {
+        "passport_number": "TST123456",
+        "status": "processing",
+        "created_at": "2025-10-07T15:19:14+00:00"
+    }
 
-Expected: `200 OK` and JSON with `status`
+OR
 
-    Run Get Nonexistent Application:
+HTTP Status: `400 Bad Request`
+Response body (example):
 
-Calls GET `localhost/api/applications/NONEXISTENT-0000`
+    {
+        "errors": [
+            "An application with this passport_number already exists."
+        ]
+    }
 
-Expected: `404 Not Found` with JSON `{ "error": "Application not found" }`
+
+**Run Get Application:**
+
+Sends GET `localhost/api/applications/{{passport_number}}`
+
+Expected behavior:
+
+HTTP Status: `200 OK`
+Response body (example):
+
+    {
+        "status": "processing"
+    }
+
+OR
+
+HTTP Status: `404 Not Found`
+Response body (example):
+
+    {
+        "error": "Application not found"
+    }
+
 
 # Blacklist — test data & how to validate
 
-The project seeds a blacklist table with the following entries (created by migration):
+The project seeds a blacklist table with the following entries:
 
     X1234567  — Fraudulent visa application detected
     Y9876543  — Visa overstay in previous country
@@ -77,7 +109,7 @@ Method: `POST`
 
 URL: `localhost/api/applications`
 
-Header: Content-Type: application/json
+Header: `Content-Type: application/json`
 
 Body (example):
 
