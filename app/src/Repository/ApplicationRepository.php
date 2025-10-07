@@ -25,7 +25,7 @@ class ApplicationRepository extends ServiceEntityRepository
 
     public function findOneByPassport(string $passportNumber): ?Application
     {
-        return $this->findOneBy(['passportNumber' => $passportNumber]);
+        return $this->findOneBy(['passport_number' => $passportNumber]);
     }
 
     public function createApplication(array $data): Application
@@ -48,6 +48,8 @@ class ApplicationRepository extends ServiceEntityRepository
         } catch (\Exception $e) {
             throw new \RuntimeException('Failed to create application: ' . $e->getMessage());
         }
+
+        return $application;
     }
 
     public function save(Application $entity, bool $flush = false): void

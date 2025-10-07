@@ -40,14 +40,13 @@ class ApplicationController extends AbstractController
             'passport_number' => $application->getPassportNumber(),
             'status' => $application->getStatus(),
             'created_at' => $application->getCreatedAt()->format(\DateTime::ATOM),
-        ], Response::HTTP_CREATED);
+        ], Response::HTTP_OK);
     }
 
     #[Route('/applications/{passport}', name: 'applications_get', methods: ['GET'])]
     public function get(string $passport): JsonResponse
     {
-        //TODO: Implement API authorization to protect sensitive data
-        //TODO: Implement rate limiting to prevent abuse
+        //TODO: Implement API authorization to access control & protect sensitive data
 
         $passport = trim($passport);
         $application = $this->applicationRepository->findOneByPassport($passport);

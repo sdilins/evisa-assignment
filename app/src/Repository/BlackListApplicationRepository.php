@@ -19,6 +19,6 @@ class BlackListApplicationRepository extends ServiceEntityRepository
 
     public function findOneByPassport(string $passportNumber): ?BlackListApplication
     {
-        return $this->findOneBy(['passportNumber' => $passportNumber]);
+        return $this->findOneBy(['passport_number' => $passportNumber]);
     }
 }

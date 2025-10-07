@@ -18,7 +18,7 @@ class PassportExpirationValidator implements ValidatorInterface
                 $sixMonthsFromNow = (new \DateTimeImmutable())->modify('+6 months');
 
                 if ($expiration <= $sixMonthsFromNow) {
-                    $res->addError('passport_expiration must be at least 6(six) months beyond.');
+                    $res->addError('passport_expiration must be at least 6 (six) months beyond.');
                 }
             } catch (\Throwable $e) {
                 $res->addError('passport_expiration must be a valid date (YYYY-MM-DD).');
