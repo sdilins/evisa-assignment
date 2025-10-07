@@ -24,7 +24,7 @@ final class Version20251006141035 extends AbstractMigration
         $this->addSql('COMMENT ON COLUMN application.passport_expiration IS \'(DC2Type:datetime_immutable)\'');
         $this->addSql('COMMENT ON COLUMN application.created_at IS \'(DC2Type:datetime_immutable)\'');
         $this->addSql('COMMENT ON COLUMN application.updated_at IS \'(DC2Type:datetime_immutable)\'');
-        $this->addSql('CREATE TABLE black_list_application (id SERIAL NOT NULL, passport_number VARCHAR(64) NOT NULL, reason VARCHAR(255) DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id), CONSTRAINT uq_application_passport_number UNIQUE (passport_number))');
+        $this->addSql('CREATE TABLE black_list_application (id SERIAL NOT NULL, passport_number VARCHAR(64) NOT NULL, reason VARCHAR(255) DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id), CONSTRAINT uq_blacklist_passport_number UNIQUE (passport_number))');
         $this->addSql('COMMENT ON COLUMN black_list_application.created_at IS \'(DC2Type:datetime_immutable)\'');
         $this->addSql("
         INSERT INTO black_list_application (passport_number, reason, created_at)
