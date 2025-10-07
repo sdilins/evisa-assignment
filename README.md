@@ -103,11 +103,9 @@ The project seeds a blacklist table with the following entries:
     F3334445  — Blacklist due to national security concern
     G1010101  — Inconsistent identity information
 
-Test with Postman (recommended):
+**Test with Postman:**
 
 Add a new Postman request (or duplicate the existing Create Application request) and use a blacklisted passport to confirm the API rejects it.
-
-Request
 
 Method: `POST`
 
