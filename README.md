@@ -41,6 +41,7 @@ Body (example):
 Expected behavior:
 
 HTTP Status: `200 OK`
+
 Response body (example):
 
     {
@@ -52,6 +53,7 @@ Response body (example):
 OR
 
 HTTP Status: `400 Bad Request`
+
 Response body (example):
 
     {
@@ -68,6 +70,7 @@ Sends GET `localhost/api/applications/{{passport_number}}`
 Expected behavior:
 
 HTTP Status: `200 OK`
+
 Response body (example):
 
     {
@@ -77,6 +80,7 @@ Response body (example):
 OR
 
 HTTP Status: `404 Not Found`
+
 Response body (example):
 
     {
