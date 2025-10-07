@@ -2,10 +2,8 @@
 
 namespace App\Controller;
 
-use App\Entity\Application;
 use App\Repository\ApplicationRepository;
 use App\Service\Application\ValidationChain;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -16,15 +14,16 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class ApplicationController extends AbstractController
 {
     public function __construct(
-        private EntityManagerInterface $em,
         private ValidationChain $validationChain,
-        private ApplicationRepository $appRepo
+        private ApplicationRepository $applicationRepository
     ) {
     }
 
     #[Route('/applications', name: 'applications_create', methods: ['POST'])]
     public function create(Request $request): JsonResponse
     {
+        //TODO: Implement rate limiting to prevent abuse
+
         $data = json_decode($request->getContent(), true);
         if (!is_array($data)) {
             return $this->json(['error' => 'Invalid JSON'], Response::HTTP_BAD_REQUEST);
@@ -35,23 +34,7 @@ class ApplicationController extends AbstractController
             return $this->json(['errors' => $result->getErrors()], Response::HTTP_BAD_REQUEST);
         }
 
-        $passport = trim((string)$data['passport_number']);
-        $firstName = trim((string)$data['first_name']);
-        $lastName = trim((string)$data['last_name']);
-        $citizenship = strtoupper(trim((string)$data['citizenship']));
-        $passportExp = new \DateTimeImmutable($data['passport_expiration']);
-
-        $application = new Application(
-            $passport,
-            $firstName,
-            $lastName,
-            $citizenship,
-            $passportExp,
-            'pending'
-        );
-
-        $this->em->persist($application);
-        $this->em->flush();
+        $application = $this->applicationRepository->createApplication($data);
 
         return $this->json([
             'passport_number' => $application->getPassportNumber(),
@@ -63,34 +46,17 @@ class ApplicationController extends AbstractController
     #[Route('/applications/{passport}', name: 'applications_get', methods: ['GET'])]
     public function get(string $passport): JsonResponse
     {
-        $passport = trim($passport);
-        $application = $this->appRepo->findOneByPassport($passport);
+        //TODO: Implement API authorization to protect sensitive data
+        //TODO: Implement rate limiting to prevent abuse
 
+        $passport = trim($passport);
+        $application = $this->applicationRepository->findOneByPassport($passport);
         if (!$application) {
             return $this->json(['error' => 'Application not found'], Response::HTTP_NOT_FOUND);
         }
 
         return $this->json([
-            'passport_number' => $application->getPassportNumber(),
             'status' => $application->getStatus(),
-            'first_name' => $application->getFirstName(),
-            'last_name' => $application->getLastName(),
-            'citizenship' => $application->getCitizenship(),
-            'passport_expiration' => $application->getPassportExpiration()->format('Y-m-d'),
-            'created_at' => $application->getCreatedAt()->format(\DateTime::ATOM),
         ], Response::HTTP_OK);
-    }
-
-    private function createApplication(array $data): Application
-    {
-        $application = new Application();
-        $application->setPassportNumber(trim((string)$data['passport_number']));
-        $application->setFirstName(trim((string)$data['first_name']));
-        $application->setLastName(trim((string)$data['last_name']));
-        $application->setCitizenship(strtoupper(trim((string)$data['citizenship'])));
-        $application->setPassportExpiration(new \DateTimeImmutable($data['passport_expiration']));
-        $application->setStatus('pending');
-
-        return $application;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Application;
 use App\Entity\BlackListApplication;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -16,13 +17,8 @@ class BlackListApplicationRepository extends ServiceEntityRepository
         parent::__construct($registry, BlackListApplication::class);
     }
 
-    public function isPassportBlacklisted(string $passportNumber): bool
+    public function findOneByPassport(string $passportNumber): ?BlackListApplication
     {
-        $qb = $this->createQueryBuilder('b')
-            ->select('COUNT(b.id)')
-            ->where('b.passportNumber = :p')
-            ->setParameter('p', $passportNumber);
-
-        return (int)$qb->getQuery()->getSingleScalarResult() > 0;
+        return $this->findOneBy(['passportNumber' => $passportNumber]);
     }
 }

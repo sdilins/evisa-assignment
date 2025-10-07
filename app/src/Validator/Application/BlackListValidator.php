@@ -18,7 +18,7 @@ class BlackListValidator implements ValidatorInterface
         $res = new ValidationResult();
         if (!empty($data['passport_number'])) {
             $passport = trim((string)$data['passport_number']);
-            if ($this->blacklistRepo->isPassportBlacklisted($passport)) {
+            if ($this->blacklistRepo->findOneByPassport($passport)) {
                 $res->addError('passport_number is blacklisted.');
             }
         }

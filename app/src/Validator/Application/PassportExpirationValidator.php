@@ -13,11 +13,20 @@ class PassportExpirationValidator implements ValidatorInterface
 
         if (isset($data['passport_expiration'])) {
             try {
-                new \DateTimeImmutable($data['passport_expiration']);
+                $expiration = new \DateTimeImmutable($data['passport_expiration']);
+
+                $sixMonthsFromNow = (new \DateTimeImmutable())->modify('+6 months');
+
+                if ($expiration <= $sixMonthsFromNow) {
+                    $res->addError('passport_expiration must be at least 6(six) months beyond.');
+                }
             } catch (\Throwable $e) {
                 $res->addError('passport_expiration must be a valid date (YYYY-MM-DD).');
             }
+        } else {
+            $res->addError('passport_expiration is required.');
         }
+
         return $res;
     }
 }
