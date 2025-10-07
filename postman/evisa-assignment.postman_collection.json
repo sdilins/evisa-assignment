@@ -1,0 +1,57 @@
+{
+  "info": {
+    "_postman_id": "e195c342-d382-4fc7-9993-184b502d0d92",
+    "name": "evisa-assignment",
+    "schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+    "_exporter_id": "17655407"
+  },
+  "item": [
+    {
+      "name": "Get Application (by passport number)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/applications/{{passport_number}}",
+          "host": [
+            "http://localhost:8080"
+          ],
+          "path": [
+            "api",
+            "applications",
+            "{{passport_number}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Application",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"passport_number\": \"TST123456\",\n  \"first_name\": \"John\",\n  \"last_name\": \"Doe\",\n  \"citizenship\": \"PL\",\n  \"passport_expiration\": \"2030-12-31\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/applications",
+          "host": [
+            "http://localhost:8080"
+          ],
+          "path": [
+            "api",
+            "applications"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
